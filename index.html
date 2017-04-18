@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				background-image: url(logo.jpg);
+				background-size: cover;
+			}
+			.wrap{
+				width:400px;
+				margin-left: 160px;
+				margin-top: 80px;
+				background-color: rgba(0,0,0,.3);
+				padding: 20px;
+				border-radius: 10px;
+				box-shadow:5px 5px 10px 5px rgba(0,0,0,.2);
+			}
+			.text{
+				width:50px;
+				text-align: center;
+			}
+			.lis{
+				margin-bottom: 10px;
+			}
+			.bottom{
+				background-color: rgba(255,255,255,.3);
+				padding: 5px;
+			}
+			.bottom span{
+				line-height: 25px;
+			}
+			.per,.total,#count,#expen,#allmoney,.text{
+				color: #df0202;
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<ul id="cont">
+				<li class="lis">
+					<input type="button" value="-"  class="even" />
+					<input type="text"  class="text" value="0"/>
+					<input type="button" value="+"  class="add"/>
+					<span>单价:</span>
+					<span class="per">1.00</span>
+					<span>元；</span>
+					<span>合计：</span>
+					<span class="total">0</span>
+					<span>元</span>
+				</li>
+				<li class="lis">
+					<input type="button" value="-"  class="even" />
+					<input type="text"  class="text" value="0"/>
+					<input type="button" value="+"  class="add"/>
+					<span>单价:</span>
+					<span class="per">2.00</span>
+					<span>元；</span>
+					<span>合计：</span>
+					<span class="total">0</span>
+					<span>元</span>
+				</li>
+				<li class="lis">
+					<input type="button" value="-"  class="even"/>
+					<input type="text"  class="text" value="0"/>
+					<input type="button" value="+"  class="add"/>
+					<span>单价:</span>
+					<span class="per">3.00</span>
+					<span>元；</span>
+					<span>合计：</span>
+					<span class="total">0</span>
+					<span>元</span>
+				</li>
+			</ul>
+			<div class="bottom">
+				<span>商品总数量：</span>
+				<span id="count">0</span>
+				<span>件；</span><br />
+				<span>商品总金额：</span>
+				<span id="allmoney">0</span>
+				<span>元</span><br />
+				<span>购买的最贵的商品单价是:</span>
+				<span id="expen">0</span>
+				<span>元</span>
+			</div>
+		</div>
+		
+		
+		<script>
+		
+			var lis=document.getElementsByClassName("lis");		//三大块
+			
+			var count=document.getElementById("count");			//商品总件数
+			var allmoney = document.getElementById('allmoney');//商品总金额 
+			var expen = document.getElementById('expen');//商品最贵单价
+			
+			var text = document.getElementsByClassName('text');	//商品个数
+			var per = document.getElementsByClassName('per');   //商品单价
+			var total = document.getElementsByClassName('total');	//商品小计
+			
+			var add = document.getElementsByClassName('add'); //按钮 增加
+			var even = document.getElementsByClassName('even'); //按钮 减
+			
+			for( var i=0;i<add.length;i++){
+				tab(i);
+			}
+			
+			function tab(a){
+				add[a].index = a;
+				add[a].onclick=function(){
+					
+					text[this.index].value++;	//改变+的value
+					total[this.index].innerHTML = text[this.index].value*per[this.index].innerHTML;	//计算单个商品总金额
+					
+					allNum();//总计数、额、最大
+				};
+				
+				even[a].index = a;
+				even[a].onclick = function(){
+					
+					if( text[this.index].value <= 0 ){ return;};	//当小于0时，停止减小
+						
+					text[this.index].value--;	//改变-的value
+					total[this.index].innerHTML = text[this.index].value*per[this.index].innerHTML;	//计算单个商品总金额
+					
+					allNum();//总计数、额、最大
+				}
+			}
+			
+			
+
+			//获取总计数、额、最大
+			function allNum(){
+				var num = 0;
+				var numpri = 0;
+				var max = 0;
+				
+				for(var i=0;i<text.length;i++){
+					num += Number(text[i].value);//计算总件数
+					numpri += Number(total[i].innerHTML);//计算总金额
+					if(text[i].value!=0){     //计算最贵单价
+						if(parseFloat(per[i].innerHTML)>max){
+							max=parseFloat(per[i].innerHTML);
+						}
+					}
+				}	
+				count.innerHTML=num;
+				allmoney.innerHTML =numpri;
+				expen.innerHTML=max;
+			}
+			
+		</script>
+	</body>
+</html>
